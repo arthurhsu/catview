@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CatView</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="node_modules/dateformat/lib/dateformat.js"></script>
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/lovefield/dist/lovefield.js"></script>
+  </head>
+  <body>
+    <input type="button" id="load" value="Load Log"></input>
+    <input type="file" id="file" style="visibility:hidden"></input>
+    <table id="header">
+      <tr>
+        <td>File:</td>
+        <td id="log_name"></td>
+      </tr>
+    </table>
+    <table id="contents">
+    </table>
+    <script src="main.js"></script>
+  </body>
+</html>

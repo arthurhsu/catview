@@ -1,0 +1,25 @@
+body {
+  font-family: "Droid Sans", sans-serif;
+}
+
+table {
+  border-spacing: 0px;
+  width: 100%
+}
+
+th {
+  background: #ccc;
+  border: 1px solid #ddd;
+  padding: 2px;
+}
+
+td {
+  font-family: consolas, monaco, "Lucida Console", monospace;
+  border-top: none;
+  border: 1px solid #ddd;
+  padding: 2px;
+}
+
+tbody tr:nth-child(even) {
+  background: #eee
+}
