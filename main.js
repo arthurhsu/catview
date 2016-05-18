@@ -83,9 +83,7 @@ function updateTable() {
     var pids = pid.split(',').map(function(v) {
       return parseInt(v);
     });
-    if (pids.length == 1) {
-      searchCondition.push(table.pid.eq(pids[0]));
-    } else {
+    if (pids.length) {
       searchCondition.push(table.pid.in(pids));
     }
   }
@@ -143,8 +141,8 @@ function parseLog(buffer) {
     toPush.push(table.createRow({
       'no': lineNumber,
       'timestamp': date,
-      'pid': tokens[0] || -1,
-      'tid': tokens[1] || -1,
+      'pid': parseInt(tokens[0] || '-1', 10),
+      'tid': parseInt(tokens[1] || '-1', 10),
       'type': tokens[2] || '',
       'tag': tokens[3] || '',
       'message': remaining.substring(sep + 2)
