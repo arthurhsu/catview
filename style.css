@@ -2,3 +2,24 @@ td {
   font-family: consolas, monaco, "Lucida Console", monospace;
   font-size: 11px;
 }
+
+.mytable td > label {
+  font-family: roboto, sans-serif;
+  font-size: 12px;
+}
+
+.mytable td > input {
+  font-size: 12px;
+}
+
+.mytable td > input[type="button"] {
+  font-family: roboto, sans-serif;
+}
+
+.mytable td:nth-child(even) {
+  width:200px;
+}
+
+.mytable td:nth-child(odd) {
+  width:50px;
+}

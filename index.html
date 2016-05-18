@@ -11,22 +11,23 @@
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="node_modules/bootstrap-table/dist/bootstrap-table.min.js"></script>
-    <script src="node_modules/lovefield/dist/lovefield.js"></script>
+    <script src="node_modules/lovefield/dist/lovefield.min.js"></script>
   </head>
   <body>
-    <input type="button" id="load" value="Load Log"></input>
+    <h3>Android Logcat Log Offline Viewer</h3>
     <input type="file" id="file" style="visibility:hidden"></input>
-    <table id="header">
+    <table id="header" class="table mytable">
       <tr>
-        <td>File:</td>
-        <td id="log_name"></td>
+        <td><input type="button" id="load" value="Load Log"></input></td>
+        <td><label>File:</label></td>
+        <td><label id="log_name"></label></td>
       </tr>
       <tr>
-        <td>PID</td>
+        <td><label>PID</label></td>
         <td><input id="pid" type="text"></input></td>
-        <td>Type</td>
+        <td><label>Type</label></td>
         <td><input id="type" type="text"></input></td>
-        <td>Module</td>
+        <td><label>Module</label></td>
         <td><input id="tag" type="text"></input></td>
         <td><input id="filter" type="button" value="Filter"></input></td>
       </tr>
