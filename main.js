@@ -1,3 +1,7 @@
+function convertDate(value) {
+  return dateFormat(new Date(value), 'mm-dd hh:mm:ss.l');
+}
+
 (function() {
 
 var dbCrash;
@@ -15,7 +19,7 @@ function createDB() {
       .addColumn('type', lf.Type.STRING)
       .addColumn('tag', lf.Type.STRING)
       .addColumn('message', lf.Type.STRING)
-      .addIndex('idxTimestamp', ['timestamp'])
+      .addPrimaryKey(['no'])
       .addIndex('idxPid', ['pid'])
       .addIndex('idxTag', ['tag']);
   builderMain.connect({storeType: lf.schema.DataStoreType.MEMORY}).then(
@@ -34,7 +38,7 @@ function createDB() {
       .addColumn('type', lf.Type.STRING)
       .addColumn('tag', lf.Type.STRING)
       .addColumn('message', lf.Type.STRING)
-      .addIndex('idxTimestamp', ['timestamp'])
+      .addPrimaryKey(['no'])
       .addIndex('idxPid', ['pid'])
       .addIndex('idxTag', ['tag']);
   builderCrash.connect({storeType: lf.schema.DataStoreType.MEMORY}).then(
@@ -62,7 +66,6 @@ function onFileSelected(evt) {
   }
 
   $('#log_name').text(f.name);
-  $('#contents').empty();
   var reader = new FileReader();
   reader.onloadend = function(evt) {
     parseLog(evt.target.result);
@@ -71,19 +74,47 @@ function onFileSelected(evt) {
 }
 
 function updateTable() {
-  dbMain.select().from(tableMain).limit(25).exec().then(function(rows) {
-    var contents = rows.map(function(row) {
-      return '<tr><td>' +
-          row.no + '</td><td>' +
-          dateFormat(new Date(row.timestamp), 'mm-dd hh:mm:ss.l') + '</td><td>' +
-          row.pid + '</td><td>' +
-          row.tid + '</td><td>' +
-          row.type + '</td><td>' +
-          row.tag + '</td><td>' +
-          row.message + '</td></tr>';
-    }).join();
-    $('#contents').empty();
-    $('#contents').append(contents);
+  var db = dbMain;
+  var table = tableMain;
+  var query = db.select().from(table).orderBy(table.no);
+  var searchCondition = [];
+  var pid = $('#pid').val().trim();
+  if (pid.length) {
+    var pids = pid.split(',').map(function(v) {
+      return parseInt(v);
+    });
+    if (pids.length == 1) {
+      searchCondition.push(table.pid.eq(pids[0]));
+    } else {
+      searchCondition.push(table.pid.in(pids));
+    }
+  }
+  var module = $('#tag').val().trim();
+  if (module.length) {
+    var modules = module.split(',');
+    if (modules.length == 1) {
+      searchCondition.push(table.tag.eq(module));
+    } else {
+      searchCondition.push(table.tag.in(modules));
+    }
+  }
+  var type = $('#type').val().trim();
+  if (type.length) {
+    var types = type.split(',');
+    if (types.length == 1) {
+      searchCondition.push(table.type.eq(type));
+    } else {
+      searchCondition.push(table.type.in(types));
+    }
+  }
+
+  if (searchCondition.length) {
+    query.where(lf.op.and.apply(undefined, searchCondition));
+  }
+
+  console.log(query.toSql());
+  query.exec().then(function(rows) {
+    $('#contents').bootstrapTable('load', rows);
   });
 }
 
@@ -129,6 +160,7 @@ function parseLog(buffer) {
 $(function() {
   $('#load').click(showFile);
   $('#file').change(onFileSelected);
+  $('#filter').click(updateTable);
   createDB();
 });
 
