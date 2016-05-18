@@ -41,17 +41,20 @@ function showFile() {
 function onFileSelected(evt) {
   var files = evt.target.files;
   var f = files[0];
+  sections = [];
 
   if (!f || !f.type.match('text.*')) {
     return;
   }
 
   $('#log_name').text(f.name);
-  var reader = new FileReader();
-  reader.onloadend = function(evt) {
-    parseLog(evt.target.result);
-  };
-  reader.readAsText(f);
+  db.delete().from(table).exec().then(function() {
+    var reader = new FileReader();
+    reader.onloadend = function(evt) {
+      preParseLog(evt.target.result);
+    };
+    reader.readAsText(f);
+  });
 }
 
 function updateTable() {
@@ -92,8 +95,31 @@ function updateTable() {
   });
 }
 
-function parseLog(buffer) {
+function preParseLog(buffer) {
   var rawContents = buffer.split('\n');
+
+  // Let's check if this is feedback report or not
+  if (rawContents[0].indexOf('--------- ') == -1) {
+    // Alright this is a multi-section feedback report
+    var start = 0;
+    var end = 0;
+    for (var i = 0; i < rawContents.length && !end; ++i) {
+      if (!start && rawContents[i].indexOf('------ SYSTEM LOG (') != -1) {
+        start = i;
+      } else if (start && rawContents[i].startsWith('[logcat: ')) {
+        end = i;
+      }
+    }
+    rawContents.splice(0, start + 1);
+    rawContents.splice(end - start - 1, rawContents.length - end + start + 1);
+    parseLog(rawContents);
+  } else {
+    // Plain logcat -d logs.
+    parseLog(rawContents);
+  }
+}
+
+function parseLog(rawContents) {
   var isCrash = false;
   var lineNumber = 0;
   var rows = [];
