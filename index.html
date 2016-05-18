@@ -21,6 +21,8 @@
         <td><input type="button" id="load" value="Load Log"></input></td>
         <td><label>File:</label></td>
         <td><label id="log_name"></label></td>
+        <td><label>Section:</label></td>
+        <td><select id="section"></select></td>
       </tr>
       <tr>
         <td><label>PID</label></td>
@@ -37,15 +39,15 @@
            data-pagination="true"
            data-search="false"
            data-page-size="25"
-           class="table table-striped table-bordered table-hover table-condensed">
+           class="table mylist table-striped table-bordered table-hover table-condensed">
       <thead>
         <tr>
-          <th data-field="timestamp" data-formatter="convertDate">Time</th>
-          <th data-field="pid">PID</th>
-          <th data-field="tid">TID</th>
-          <th data-field="type">Type</th>
-          <th data-field="tag">Tag</th>
-          <th data-field="message">Message</th>
+          <th class="col-md-1" data-field="timestamp" data-formatter="convertDate">Time</th>
+          <th class="col-md-1" data-field="pid">PID</th>
+          <th class="col-md-1" data-field="tid">TID</th>
+          <th class="col-md-1" data-field="type">Type</th>
+          <th class="col-md-1" data-field="tag">Tag</th>
+          <th class="col-md-6" data-field="message">Message</th>
         </tr>
       </thead>
     </table>
