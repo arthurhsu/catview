@@ -10,11 +10,11 @@ All filtering fields can be comma separated strings
 
 ## How to develop/change it?
 
-1. Clone this repo from GitHub
-2. <pre>npm install -g gulp</pre>
-3. <pre>npm install</pre>
-4. <pre>gulp server</pre>
-5. Browse to http://localhost:8000
-6. Make changes in another console
-7. <pre>gulp build</pre>
-8. Refresh browser
+1. Clone this repo from GitHub, then
+   <pre>npm install -g gulp</pre>
+   <pre>npm install</pre>
+   <pre>gulp server</pre>
+2. Browse to http://localhost:8000
+3. Make changes in another console, then
+   <pre>gulp build</pre>
+4. Refresh browser
