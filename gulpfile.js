@@ -13,6 +13,7 @@ var DIST_FILES = [
   'node_modules/bootstrap/dist/css/bootstrap.min.css',
   'node_modules/dateformat/lib/dateformat.js',
   'node_modules/jquery/dist/jquery.min.js',
+  'node_modules/jszip/dist/jszip.min.js',
   'node_modules/bootstrap/dist/js/bootstrap.min.js',
   'node_modules/bootstrap-table/dist/bootstrap-table.min.js',
   'node_modules/lovefield/dist/lovefield.min.js'

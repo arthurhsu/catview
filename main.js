@@ -38,22 +38,46 @@ function showFile() {
   file.click();
 }
 
+function readTextFile(f) {
+  var reader = new FileReader();
+  reader.onloadend = function(evt) {
+    preParseLog(evt.target.result);
+  };
+  reader.readAsText(f);
+}
+
+function readZipFile(f) {
+  var zip = new JSZip();
+  zip.loadAsync(f).then(function(zip) {
+    console.log('zip loaded', zip);
+    var fileName = Object.keys(zip.files)[0];
+    console.log(fileName, zip.files[fileName]);
+    return zip.files[fileName].async('string');
+  }).then(function(rawContents) {
+    console.log(rawContents);
+    preParseLog(rawContents);
+  });
+}
+
+function notSupported() {
+  console.log('File type is not supported');
+}
+
 function onFileSelected(evt) {
   var files = evt.target.files;
   var f = files[0];
   sections = [];
 
-  if (!f || !f.type.match('text.*')) {
+  if (!f) {
     return;
   }
 
   $('#log_name').text(f.name);
+  var callback = f.type.match('text.*') ? readTextFile :
+      f.type.match('zip') ? readZipFile : notSupported;
+
   db.delete().from(table).exec().then(function() {
-    var reader = new FileReader();
-    reader.onloadend = function(evt) {
-      preParseLog(evt.target.result);
-    };
-    reader.readAsText(f);
+    callback(f);
   });
 }
 
@@ -96,7 +120,7 @@ function updateTable() {
 }
 
 function preParseLog(buffer) {
-  var rawContents = buffer.split('\n');
+  var rawContents = buffer.replace('\r\n', '\n').split('\n');
 
   // Let's check if this is feedback report or not
   if (rawContents[0].indexOf('--------- ') == -1) {
