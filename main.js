@@ -73,7 +73,7 @@ function onFileSelected(evt) {
   }
 
   $('#log_name').text(f.name);
-  var callback = f.type.match('text.*') ? readTextFile :
+  var callback = (!f.type.length || f.type.match('text.*')) ? readTextFile :
       f.type.match('zip') ? readZipFile : notSupported;
 
   db.delete().from(table).exec().then(function() {
