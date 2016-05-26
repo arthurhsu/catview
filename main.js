@@ -148,14 +148,18 @@ function parseLog(rawContents) {
   var lineNumber = 0;
   var rows = [];
   var section = 'unknown';
+  var sections = [];
   var sectionIndicator = '--------- beginning of ';
   rawContents.forEach(function(line) {
     ++lineNumber;
     if (line.length < 18) return;
     if (line.indexOf(sectionIndicator) != -1) {
-      section = line.substring(sectionIndicator.length);
+      section = line.substring(sectionIndicator.length).trim();
       sections.push(section);
       return;
+    }
+    if (sections.length == 0) {
+      sections = [section];
     }
     var date = Date.parse(line.substring(0, 18));
     var remaining = line.substring(18);
@@ -173,10 +177,6 @@ function parseLog(rawContents) {
     }));
   });
 
-  // Update the selector
-  if (sections.length == 0) {  // The log has no sections
-    sections = ['unknown'];
-  }
   sections.forEach(function(section) {
     $('#section').append('<option value="' + section + '">' + section + '</option>');
   });
