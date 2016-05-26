@@ -174,6 +174,9 @@ function parseLog(rawContents) {
   });
 
   // Update the selector
+  if (sections.length == 0) {  // The log has no sections
+    sections = ['unknown'];
+  }
   sections.forEach(function(section) {
     $('#section').append('<option value="' + section + '">' + section + '</option>');
   });
