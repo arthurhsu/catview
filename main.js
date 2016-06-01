@@ -81,6 +81,15 @@ function onFileSelected(evt) {
   });
 }
 
+function filterRows(wildcard, rows) {
+  var filter = wildcard.toLowerCase();
+  return rows.filter(function(row) {
+    var msg = row['message'].toLowerCase();
+    var tag = row['tag'].toLowerCase();
+    return msg.indexOf(filter) != -1 || tag.indexOf(filter) != -1;
+  });
+}
+
 function updateTable() {
   var section = $('#section').val();
   var query = db.select().from(table).orderBy(table.no);
@@ -109,13 +118,15 @@ function updateTable() {
     }
   }
 
+  var wildcard = $('#wildcard').val().trim();
   if (searchCondition.length) {
     query.where(lf.op.and.apply(undefined, searchCondition));
   }
 
   console.log(query.toSql());
   query.exec().then(function(rows) {
-    $('#contents').bootstrapTable('load', rows);
+    var realRows = wildcard.length ? filterRows(wildcard, rows) : rows;
+    $('#contents').bootstrapTable('load', realRows);
   });
 }
 
